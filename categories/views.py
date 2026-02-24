@@ -1,7 +1,14 @@
-from rest_framework import generics
+# categories/views.py
+from rest_framework import generics, permissions
 from .models import Category
 from .serializers import CategorySerializer
 
-class CategoryListView(generics.ListAPIView):
+class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]  # Only logged-in users can create
+
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
