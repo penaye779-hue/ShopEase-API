@@ -20,7 +20,14 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.http import JsonResponse
 
+def home(request):
+    return JsonResponse({
+        "status": "ShopEase API is running",
+        "version": "1.0"
+    })
+
 urlpatterns = [
+    path('', home),  # root
     path('admin/', admin.site.urls),
 
     # User endpoints
@@ -35,13 +42,4 @@ urlpatterns = [
 
     # Category endpoints
     path('api/categories/', include('categories.urls')),
-]
-def home(request):
-    return JsonResponse({
-        "status": "ShopEase API is running",
-        "version": "1.0"
-    })
-
-urlpatterns = [
-    path('', home),
 ]
