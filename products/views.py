@@ -1,38 +1,36 @@
 # products/views.py
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, viewsets, filters
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Product
 from .serializers import ProductSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-# Pagination class
-class ProductPagination(PageNumberPagination):
-    page_size = 5            # default items per page
-    page_size_query_param = 'page_size'
-    max_page_size = 50
-
-# List all products & create new product
+# List and Create products
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Anyone can view, only auth users can create
-    pagination_class = ProductPagination
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['category', 'price', 'stock']  # filtering options
-    search_fields = ['name', 'description']            # search options
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Allow read to everyone, write only to authenticated
 
-# Retrieve, update, delete a single product
+# Retrieve, Update, Delete single product
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Anyone can view, only auth users can update/delete
-from .permissions import IsOwnerOrReadOnly
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-class ProductViewSet(ModelViewSet):
+# Full CRUD with search and filter
+class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    # Enable filtering and searching
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['category']
+    search_fields = ['name']
+
+# Pagination
+class ProductPagination(PageNumberPagination):
+    page_size = 5  # default page size
+    page_size_query_param = 'page_size'
+    max_page_size = 50
