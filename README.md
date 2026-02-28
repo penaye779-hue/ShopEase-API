@@ -3,8 +3,6 @@ Overview
 
 ShopEase API is a backend service for managing products, categories, and users in an e-commerce platform. It provides secure endpoints for user registration, authentication, and CRUD operations for products and categories.
 
-This project is built as part of the BE Capstone Part 5 for the 2026 program.
-
 Features
 
 User registration and JWT authentication
