@@ -27,7 +27,11 @@ SECRET_KEY = 'django-insecure-+l0rqcppq^a)7^7=$&5c7eegthw+bg@h6^0*hr5^#-3n!^uaa^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["shopease-api-rkb1.onrender.com"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "shopease-api-rkb1.onrender.com",
+]
 
 
 # Application definition
